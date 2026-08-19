@@ -337,3 +337,25 @@ html[data-theme="dark"] #nav {
 #nav .menus_items .menus_item > a > i {
     font-size: 1.25em;
 }
+
+/* ========== 13. 顶图鼠标视差（Parallax）========== */
+/* 让 #page-header 成为独立层叠上下文，保证 -1 的视差层不穿到 body 背景下面 */
+#page-header {
+    position: relative;
+    isolation: isolate;
+}
+/* 视差背景层：放大 110% 防止鼠标移动时露出边缘空白（B 站/壁纸同款做法） */
+#page-header .parallax-bg {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;               /* 放在 header 内容（标题/导航）之下 */
+    will-change: transform;    /* GPU 加速，避免卡顿 */
+    transition: transform 0.15s ease-out;  /* 平滑跟随鼠标 */
+    pointer-events: none;      /* 不拦截鼠标事件 */
+}
