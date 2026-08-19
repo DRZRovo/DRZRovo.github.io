@@ -1,9 +1,11 @@
 /* ============================================================
-   顶图动态视频背景 + 鼠标视差 - parallax.js
+   全站动态视频背景 + 鼠标视差 - parallax.js
    原理:
-     - 在 #page-header 内创建 <video> 背景层（循环播放动态壁纸）
+     - 在 <body> 底部创建全屏 <video> 背景层（循环播放动态壁纸）
      - 鼠标移动 → 计算相对屏幕中心的位置 (-1 ~ 1)
      - 应用到背景层的 transform 位移（方向权重: 横 x1.0, 纵 x0.2）
+   注意: 视频层必须放在 body 级（而非 #page-header），
+         因为 disable_top_img 会让 #page-header 塌缩成导航栏高度。
    通过 _config.butterfly.yml 的 inject.bottom 引入
    ============================================================ */
 
@@ -16,14 +18,11 @@
   var VIDEO_SRC = '/img/core/live-bg.mp4';
 
   function initParallax() {
-    var header = document.getElementById('page-header');
-    if (!header) return;
+    // pjax 切换时 body 级视频层不会被替换，已存在则跳过
+    var existing = document.querySelector('body > .parallax-bg');
+    if (existing) return;
 
-    // pjax 切换后 header 是新的，先清理旧的视差层
-    var old = header.querySelector('.parallax-bg');
-    if (old) old.parentNode.removeChild(old);
-
-    // 创建视频背景层（浏览器要求 muted + playsinline 才能自动播放）
+    // 创建全屏视频背景层（浏览器要求 muted + playsinline 才能自动播放）
     var video = document.createElement('video');
     video.className = 'parallax-bg';
     video.src = VIDEO_SRC;
@@ -32,16 +31,12 @@
     video.muted = true;
     video.playsInline = true;
     video.setAttribute('playsinline', '');
-    // 减少移动端功耗：视频空闲时暂停
     video.setAttribute('webkit-playsinline', '');
+    document.body.insertBefore(video, document.body.firstChild);
 
-    header.insertBefore(video, header.firstChild);
-
-    // 视频加载失败时降级为静态背景图
+    // 视频加载失败时隐藏（露出 body 静态背景图）
     video.addEventListener('error', function () {
-      video.style.backgroundImage = "url('/img/core/bkgnd1.webp')";
-      video.style.backgroundSize = 'cover';
-      video.style.backgroundPosition = 'center';
+      video.style.display = 'none';
     });
 
     var raf = null;
