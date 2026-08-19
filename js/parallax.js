@@ -1,9 +1,9 @@
 /* ============================================================
-   顶图鼠标视差效果 - parallax.js
-   原理（参考 Wallpaper Engine 壁纸的深度视差）:
+   顶图动态视频背景 + 鼠标视差 - parallax.js
+   原理:
+     - 在 #page-header 内创建 <video> 背景层（循环播放动态壁纸）
      - 鼠标移动 → 计算相对屏幕中心的位置 (-1 ~ 1)
-     - 应用到顶图背景层的 transform 位移
-     - 方向权重: 横向 x1.0, 纵向 x0.2（与壁纸 g_DirectionWeights "1 0.2" 一致）
+     - 应用到背景层的 transform 位移（方向权重: 横 x1.0, 纵 x0.2）
    通过 _config.butterfly.yml 的 inject.bottom 引入
    ============================================================ */
 
@@ -12,6 +12,8 @@
   var MAX_SHIFT = 30;
   // 纵向权重（横向的 0.2 倍，模仿壁纸的方向权重）
   var VERTICAL_WEIGHT = 0.2;
+  // 动态背景视频路径（source/img/core/live-bg.mp4）
+  var VIDEO_SRC = '/img/core/live-bg.mp4';
 
   function initParallax() {
     var header = document.getElementById('page-header');
@@ -21,19 +23,26 @@
     var old = header.querySelector('.parallax-bg');
     if (old) old.parentNode.removeChild(old);
 
-    // 创建视差背景层
-    var bg = document.createElement('div');
-    bg.className = 'parallax-bg';
+    // 创建视频背景层（浏览器要求 muted + playsinline 才能自动播放）
+    var video = document.createElement('video');
+    video.className = 'parallax-bg';
+    video.src = VIDEO_SRC;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    // 减少移动端功耗：视频空闲时暂停
+    video.setAttribute('webkit-playsinline', '');
 
-    // 自动跟随主题配置的全局背景图（body 的 background-image）
-    var bodyBg = window.getComputedStyle(document.body).backgroundImage;
-    if (bodyBg && bodyBg !== 'none') {
-      bg.style.backgroundImage = bodyBg;
-    } else {
-      bg.style.backgroundImage = "url('/img/core/bkgnd1.webp')";
-    }
+    header.insertBefore(video, header.firstChild);
 
-    header.insertBefore(bg, header.firstChild);
+    // 视频加载失败时降级为静态背景图
+    video.addEventListener('error', function () {
+      video.style.backgroundImage = "url('/img/core/bkgnd1.webp')";
+      video.style.backgroundSize = 'cover';
+      video.style.backgroundPosition = 'center';
+    });
 
     var raf = null;
     function onMouseMove(e) {
@@ -43,7 +52,7 @@
         // 鼠标相对屏幕中心: -1 (最左) ~ 1 (最右)
         var x = (e.clientX / window.innerWidth - 0.5) * 2;
         var y = (e.clientY / window.innerHeight - 0.5) * 2;
-        bg.style.transform =
+        video.style.transform =
           'translate3d(' + (x * MAX_SHIFT).toFixed(1) + 'px, ' +
           (y * MAX_SHIFT * VERTICAL_WEIGHT).toFixed(1) + 'px, 0)';
       });
