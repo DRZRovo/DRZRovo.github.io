@@ -338,8 +338,7 @@ html[data-theme="dark"] #nav {
     font-size: 1.25em;
 }
 
-/* ========== 13. 全站动态视频背景 + 鼠标视差（Parallax）========== */
-/* 让 body 成为独立层叠上下文：负 z-index 的视频层位于 body 背景图之上、页面内容之下 */
+/* ========== 13. 全站动态视频背景 + 鼠标视差（Parallax）========== *//* 让 body 成为独立层叠上下文：负 z-index 的视频层位于 body 背景图之上、页面内容之下 */
 body {
     position: relative;
     isolation: isolate;
@@ -356,4 +355,11 @@ body > .parallax-bg {
     will-change: transform;    /* GPU 加速，避免卡顿 */
     transition: transform 0.15s ease-out;  /* 平滑跟随鼠标 */
     pointer-events: none;      /* 不拦截鼠标事件 */
+}
+
+/* ========== 14. 去除头像悬停旋转 ========== */
+/* 主题默认 .avatar-img img:hover 会旋转 360°，这里禁用 */
+.avatar-img img:hover {
+    transform: none !important;
+    transition: none !important;
 }
