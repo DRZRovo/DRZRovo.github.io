@@ -70,12 +70,6 @@ html:not([data-theme="dark"]) #nav .menus_item:hover > a > i {
 }
 /* 底部与 Meta 数据 */
 html:not([data-theme="dark"]) #page-header .page-title,
-html:not([data-theme="dark"]) #footer,
-html:not([data-theme="dark"]) #footer a,
-html:not([data-theme="dark"]) #footer div,
-html:not([data-theme="dark"]) #footer p,
-html:not([data-theme="dark"]) #footer span,
-html:not([data-theme="dark"]) #footer .copyright *,
 html:not([data-theme="dark"]) #post-info .post-title,
 html:not([data-theme="dark"]) #post-info #post-meta,
 html:not([data-theme="dark"]) #post-info #post-meta a,
@@ -83,6 +77,45 @@ html:not([data-theme="dark"]) #post-info #post-meta .post-meta-separator,
 html:not([data-theme="dark"]) #post-info #post-meta i {
     color: #2c3e50 !important;
     text-shadow: none !important;
+}
+
+/* ========== 2.5 页脚文字白色(背景为视频/图片,深色文字看不清) ========== */
+/* 选择器必须带 html:not([data-theme]) 前缀,否则会被上面同权重规则覆盖 */
+html:not([data-theme="dark"]) #footer,
+html:not([data-theme="dark"]) #footer a,
+html:not([data-theme="dark"]) #footer div,
+html:not([data-theme="dark"]) #footer p,
+html:not([data-theme="dark"]) #footer span,
+html:not([data-theme="dark"]) #footer .copyright *,
+html[data-theme="dark"] #footer,
+html[data-theme="dark"] #footer a,
+html[data-theme="dark"] #footer div,
+html[data-theme="dark"] #footer p,
+html[data-theme="dark"] #footer span,
+html[data-theme="dark"] #footer .copyright * {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+/* 页脚统计区与备案号排版 */
+.footer-stats {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.8;
+}
+.footer-stats .footer-sep {
+    margin: 0 8px;
+    opacity: 0.6;
+}
+.footer-beian {
+    margin-top: 4px;
+    font-size: 13px;
+}
+.footer-beian a {
+    color: #ffffff !important;
+    text-decoration: none;
+}
+.footer-beian a:hover {
+    color: #49b1f5 !important;
 }
 
 /* ========== 3. 明亮主题导航栏子菜单颜色 ========== */
