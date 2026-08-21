@@ -14,7 +14,9 @@
   var MAX_SHIFT = 30;
   // 纵向权重（横向的 0.2 倍，模仿壁纸的方向权重）
   var VERTICAL_WEIGHT = 0.2;
-  // 动态背景视频路径（source/img/core/live-bg.mp4）
+  // 动态背景视频路径（对应文件 source/img/core/live-bg.mp4）
+  // 换背景视频: 把新视频覆盖到 source/img/core/live-bg.mp4（同名替换），
+  //             或改下面这行路径指向新文件（如 /img/core/xxx.mp4）
   var VIDEO_SRC = '/img/core/live-bg.mp4';
 
   function initParallax() {

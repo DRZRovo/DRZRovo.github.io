@@ -363,3 +363,12 @@ body > .parallax-bg {
     transform: none !important;
     transition: none !important;
 }
+
+/* ========== 15. 首页大标题颜色 ========== */
+/* 白色标题，在深色雨景视频背景上对比度更好（只改 #site-title，不影响其他文字） */
+html:not([data-theme="dark"]) #site-title {
+    color: #ffffff !important;
+}
+html[data-theme="dark"] #site-title {
+    color: #ffffff !important;
+}
